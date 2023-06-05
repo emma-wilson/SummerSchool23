@@ -23,3 +23,38 @@ Jessica's dataset comprised over 33 million texts, 13% of which needed metadata 
 
 Jessica encountered various problems during her research. Traumatic and violent texts were intersperced with books and magazines. This was considered as part of her second question, "what is a library?", as it brings up questions about what sort of texts should be preserved.
 Additionally, machine-generated metadata erased information about minority language texts. Copyright laws, legal cases, and API subscriptions are major barriers to webscraping and may put future preservation of digital materials at risk.
+
+## Webscraping
+Webscraping is the extraction of data from a website. Webscrping allows researchers to do "big qualitative" data analysis. The session started with a short presentation by James Besse about webscraping.
+
+### What is HTML?
+HTML is the standard markup used for creating the structure and content of websites. 
+HTML tags are the building blocks of a HTML document and HTML attributes also provide additional information about HTML elements.
+CSS selector gadgets are web-based tools that allow us to target specific parts of HTML, just like the inspect tool in web browsers. 
+This can help select specific data to scrape from a website.
+
+### Webscraping approaches
+There are three main approaches to webscraping:
+
+- **Crawl** and scrape HTML / XML
+- Application programming interfaces (**APIs**)
+- **Web browser automation** using tools such as Selenium or Puppeteer
+
+### Law and Ethics
+Some websites specifically ban webscraping in their terms of service, so it may not always be legal. 
+However, it's not always clear whether permission is needed to webscrape.
+
+### Practicalities
+Webscraping requires you to be better at writing and editing code than as required by statistical modelling. 
+Web data is messy and you will have to do extensive cleaning. 
+Additionally, websides may be internally and externally inconsistent in how text and HTML is formatted.
+What works for one website will unlikely work for other websites, and may not work for every page on that website.
+Often, websites will change. They will also try to block scrapers.
+
+## Practical
+In Day One's practical session, we used the [rvest](https://rvest.tidyverse.org/index.html) package, which is part of the tidyverse.
+
+The session aims were to:
+
+- Automatically extract news items from the UK Government website News sections on the cost of living
+- Do the same for the Scottish Government website
