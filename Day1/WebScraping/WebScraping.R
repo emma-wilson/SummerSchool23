@@ -193,3 +193,76 @@ page1 <- 'https://www.gov.scot/news/'
 format <- 'https://www.gov.scot/news/?term=cost%20of%20living&cat=filter&page='
 
 # Write your code below here
+
+# Get article links
+nums <- 2:10 # get pages 2-10 for demo
+pages <- paste0(format, nums) # format links for pages 2-10
+pages <- c(page1, pages) # add page 1 to this list
+
+get.article.links <- function(x){ # Put x, which stands in this case for a single URL, as the only argument for the function
+  links <- read_html(x) %>% # Reads the HTML of the page into the environment
+    html_nodes('.ds_search-result__link') %>% # Selects all instances of content matching a CSS selector
+    html_attr('href') # Specifies that we want the URL from this content
+}
+
+ScotArticleLinks <- map(pages, get.article.links) # apply function to all list
+ScotArticleLinksFlat <- ScotArticleLinks %>%
+  flatten() # flatten list
+base <- "https://www.gov.scot" # base of url is excluded
+ScotArticleLinksFlat <- paste0(base, ScotArticleLinksFlat) # add the base url back in
+
+# Get test set to create webscraping functions
+test <- head(ScotArticleLinksFlat)
+test
+
+# try to get title
+get.title <- function(x){
+  title <- read_html(x) %>% # Get the HTML
+    html_node('.ds_page-header__title') %>% # Select the first item with the chosen CSS selector
+    html_text() # Specify that we want the text
+}
+
+map(test, get.title) # works!
+
+# try to get date
+get.date <- function(x){
+  title <- read_html(x) %>% # Get the HTML
+    html_nodes('.ds_metadata__item:nth-child(1) .ds_metadata__value') %>% # Select the first item with the chosen CSS selector
+    html_text() # Specify that we want the text
+}
+
+map(test, get.date) # works!
+
+# try to get text
+get.text <- function(x){
+  body <- read_html(x) %>% # Get the HTML
+    html_node('.ds_layout__content') %>% # Get the first object matching the CSS selector
+    html_text() # Specify that we want the text
+}
+
+map(test, get.text)
+
+# webscrape all data
+Scottexts <- map(ScotArticleLinksFlat, get.text)#Get all the texts from the list of links for the first 300 articles
+Scotdates <- map(ScotArticleLinksFlat, get.date)#Get all the dates from the list of links for the first 300 articles
+Scottitles <- map(ScotArticleLinksFlat, get.title)#Get all the titles from the list of links for the first 300 articles
+
+## 5.2 Create a new Data Frame---------------
+# Now we can finally bring them together in a data frame 
+ScotNews<- as.data.frame(cbind(Scotdates,Scottitles, clean_text))
+ScotNews <- ScotNews %>% rename(dates = Scotdates, titles = Scottitles)
+ScotNews$clean_text <-unlist(ScotNews$clean_text) # Transform texts from list to vector
+ScotNews$dates <-unlist(ScotNews$dates) #Transform dates from list to vector
+ScotNews$titles <-unlist(ScotNews$titles) #Transform titles from list to vector
+ScotNews$dates<-as.Date(ScotNews$dates, format = "%d %B %Y") #Make sure the date is encoded as date (https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/as.Date)
+
+## 5.3 Subset most recent articles ----------
+# Cost of Living is not a new concept so although is likely that most of the article we scraped are from the last couple of years let's subset our data set to make sure all of them are connected to the ongoing issue
+ScotNewsLast3Years <- subset(ScotNews, dates >= "2020-01-01")  # Subset so the date is greater than Jan 1st 2020
+# Now we have only 222 articles let's round to 200
+ScotNewsLast3Years <- ScotNewsLast3Years %>% 
+  arrange(desc(dates)) %>% #order by the latest dates
+  slice(1:200) # Select the most recent 200 articles (the first 200 in a list)
+
+## 5.4 Export the file created----------
+write.csv(ScotNewsLast3Years, "Day1/WebScraping/outputs/ScotlandNews.csv")
