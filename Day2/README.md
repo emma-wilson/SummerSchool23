@@ -27,3 +27,35 @@ In his research, Justin compared different methods of measuring moral foundation
 
 Justin found that the dictionary-assisted ChatGPT approach seemed to perform similarly to the dictionary approach. 
 However, ChatGPT did hallucinate and was possibly unreliable.
+
+## Text Analysis
+The practical session on text analysis was led by Jessica Witte. 
+Text analysis is the computational evaluation, investigation, and exploration of text data. 
+You can use supervised or unsupervised methods for text analysis, and types of text analysis include topic modelling, named entity recognition, sentimment analysis, and text classification.
+It is important to remember that the training data used to build the algorithm is important, and computers "read" differently than humans do.
+
+### Text Mining
+Text mining is a type of natural language processing which aims to identify patterns and trends  in natural language data.
+Methods for text mining include:
+
+- Keyword search / term frequency
+- Term frequency-inverse document frequency
+- Named entity recognition
+- Topic modelling
+- Sentiment analysis
+
+### Tokenisation
+Tokenisation involves breaking down a piece of text into smaller units called tokens. 
+Tokens can be words, sentences, or characters, and can help standardise the text for analysis.
+
+### Text Cleaning
+Text cleaning means formatting text fo analysis and removing extraneous information. Common steps include making everything lowercase, removing URLs and symbols, removing stopwors, tokenisation, stemming, and lemmatization.
+
+## Practical 1
+We will work with the data scraped from the UK Government and Scottish Government websites yesterday. 
+We used the quanteda, quanteda.textplots, quanteda.textmodels, lexicon, tidyverse, and tm R packages.
+
+The sessions aims to:
+
+- Observe the number and length of articles on the cost of living in the last 3 years
+- Investigate if there are differentes in the wording about the cost of living between the data sets
