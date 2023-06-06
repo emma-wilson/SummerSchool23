@@ -59,3 +59,25 @@ The sessions aims to:
 
 - Observe the number and length of articles on the cost of living in the last 3 years
 - Investigate if there are differentes in the wording about the cost of living between the data sets
+
+## Topic Modelling
+Topic modelling is an unsupervised method of text analysis. 
+Computers read like a bag of words, which ignores all context. 
+There are two types of topic modelling: latent dirichlet analysis (LDA) and atent semantic analysis (LSA). 
+Topic modelling is ideal for large, pre-processed datasets free from irony, sarcasm, and humour (as the computer doesn't understand these).
+It can be used to identify common themes or concepts, grouping my theme, and looking at shifts over time.
+The computer does not name the topics, it just labels them numerically.
+Researchers can analyse and interpret the data and give names to topics.
+
+One issue with this approach is that sometimes words can be spelled the same but have different meanings, e.g. lead can mean "lead a group" or "lead is a metal". The computer does not have context to understand how words are used.
+
+### Machine learning
+There are two main types of machine learning: supervised learning (ideal for classification) and unsupervised learning (ideal for exploratory overviews).
+
+## Practical
+We will work with the same web scraped data, and used the quanteda, tidyverse, quanteda.textstats, quanteda.textmodels, quanteda.textplots, tm, topicmodels, syuzhet, RColorBrewer.
+
+The session aims to:
+
+- Identify some common themes that appear in the UK government's publications about the cost of living
+- Compare the UK and Scotland data sets, and investigate if there are any patterns/similarities/differences in themes
