@@ -249,8 +249,8 @@ Scottitles <- map(ScotArticleLinksFlat, get.title)#Get all the titles from the l
 
 ## 5.2 Create a new Data Frame---------------
 # Now we can finally bring them together in a data frame 
-ScotNews<- as.data.frame(cbind(Scotdates,Scottitles, clean_text))
-ScotNews <- ScotNews %>% rename(dates = Scotdates, titles = Scottitles)
+ScotNews<- as.data.frame(cbind(Scotdates,Scottitles, Scottext))
+ScotNews <- ScotNews %>% rename(dates = Scotdates, titles = Scottitles, clean_text = Scottext)
 ScotNews$clean_text <-unlist(ScotNews$clean_text) # Transform texts from list to vector
 ScotNews$dates <-unlist(ScotNews$dates) #Transform dates from list to vector
 ScotNews$titles <-unlist(ScotNews$titles) #Transform titles from list to vector
