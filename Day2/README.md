@@ -25,4 +25,5 @@ In his research, Justin compared different methods of measuring moral foundation
 3. crowdsourced
 4. ChatGPT (zero-shot and dictionary assisted)
 
-Justin found that the dictionary-assisted ChatGPT approach performed similarly to the dictionary approach.
+Justin found that the dictionary-assisted ChatGPT approach seemed to perform similarly to the dictionary approach. 
+However, ChatGPT did hallucinate and was possibly unreliable.
