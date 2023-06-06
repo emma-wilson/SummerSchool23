@@ -220,6 +220,120 @@ article_text_SC<-corpus(SC_data_clean, text_field='texts')
 #1. Follow the steps from the first lesson to analyse the Scotland data. When you are finished, compare the world clouds and the top-keys results between the Scotland and UK datasets.
 #Discuss your findings with your table. 
 
+NtokenSC<-as.vector(ntoken(article_text_SC))
+TokenSC <-data.frame(Tokens=NtokenSC, Dataset="Scotland", Date=SC_data_clean$dates)
+TokenSC$MonthYear <- format(as.Date(TokenSC$Date, format="%Y-%m-%d"),"%Y-%m")
+# Now we can group the data by Month/Year and, for each group, count 1) how many articles were published and 2) how many tokens they contained
+BreakoutSC<- TokenSC %>%
+  group_by(MonthYear,Dataset)%>%
+  summarize(NArticles=n(), MeanTokens=round(mean(Tokens)))
+# Now we can plot the trends. We are going to focus on plots on Friday
+ggplot(BreakoutSC, aes(x=MonthYear, y=NArticles))+ # Select data set and coordinates we are going to plot
+  geom_point(aes(size=MeanTokens, fill=MeanTokens),shape=21, stroke=1.5, alpha=0.9, colour="black")+ # Which graph I want 
+  labs(x = "Timeline", y = "Number of Articles", fill = "Mean of Tokens", size="Mean of Tokens", title="Number of Articles and Tokens in the Scottish Gov Website")+ # Rename labs and title
+  geom_path(aes(group=1), colour="black", size=1)+ # Add a line that will connect the dots 
+  scale_size_continuous(range = c(5, 15))+ # Resize the dots to be bigger
+  geom_text(aes(label=MeanTokens))+ # Add the mean of tokens in the dots
+  scale_fill_viridis_c(option = "plasma")+ # Change the colour coding
+  theme_bw()+ # B/W Background
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "bottom")+ # Rotate labels of x and move them slightly down. Plus move the position to the bottom 
+  guides(size = "none") # Remove the Size from the Legend 
+
+# Discussion question: what is the graph telling us about our data?
+
+# 5. Tokenise the Corpus =================
+# Now, we can tokenise the corpus, which will break the textual data into separate words grouped by document. We are also removing symbols, URLs, and punctuation.
+article_tokens_SC <- quanteda::tokens(article_text_SC, 
+                                   remove_symbols=TRUE, 
+                                   remove_url=TRUE, 
+                                   remove_punct=TRUE)
+
+# Take a look at our tokens list by printing the second document:
+article_tokens_SC[2]
+
+# Remove tokens under 3 characters. (Shorter words won't tell us much about our data, and because we removed punctuation, we want to get rid of the 
+#truncated contractions--e.g. I'm -->'I', 'm')
+article_tokens_SC <- tokens_select(article_tokens_SC, min_nchar = 3)
+
+# 6. Keywords in Context =================
+# keyword search examples (using kwic aka "keyword in context")
+kwic(article_tokens_SC, "cost")
+kwic(article_tokens_SC, "cost", 3)
+article_tokens_SC %>% 
+  kwic(pattern = phrase("cost of living"))
+#Discussion: Examining the output, why do you think we get 0 matches for this search? 
+
+article_tokens_SC %>%
+  kwic(pattern=c("price", "bills", "payment"))
+
+# 7. Visualise the Results ==============
+# Convert to document-feature matrix (aka "dfm")
+dfm_sc <- dfm(article_tokens_SC)
+
+## 7.1. Wordcolud ----------------------
+# Plot a wordcloud
+textplot_wordcloud(dfm_sc, max_words=100, color='black')
+# What observations do we have about the wordcloud? what should our next steps be?
+
+## 7.2. Cleaning the Wordcloud ----------------------
+# To lowercase
+dfm_sc <- dfm_tolower(dfm_sc)
+
+# Remove Stop-words
+dfm_nostop_sc <- dfm_remove(dfm_sc, stopwords('english'))
+topfeatures(dfm_nostop_sc, 10)
+topfeatures(dfm_sc, 10)
+
+
+#Let's try the word cloud again:
+textplot_wordcloud(dfm_nostop_sc, rotation = 0.25,
+                   max_words=50,
+                   color = rev(RColorBrewer::brewer.pal(10, "Spectral")))
+
+# What observations do we have?
+
+## 7.3. Remove Costum Stopwords --------------------
+# We can also create a custom list of words to remove from the corpus
+
+customstopwords <- c("cost", "living", "will")#removed keywords that aren't telling us much or that skew the results
+
+dfm_nostop_cost_sc <- dfm_remove(dfm_sc, c(stopwords('english'), customstopwords))
+topfeatures(dfm_nostop_sc, 10)
+topfeatures(dfm_nostop_cost_sc, 10)
+
+# 8. Further Cleaning =====================
+# Further steps for cleaning: stemming vs. lemmatization
+## 8.1. Stemming ===========
+nostop_toks_sc <- tokens_select(article_tokens_SC, pattern = stopwords("en"), selection = "remove")
+stem_toks_sc <- tokens_wordstem(nostop_toks_sc, language=quanteda_options('language_stemmer'))
+stem_dfm_sc <- dfm(stem_toks_sc)
+# Let's see the top features
+topfeatures(stem_dfm_sc, 30)
+
+## 8.2. Lemmatization ================
+lemmas_sc <- tokens_replace(nostop_toks_sc, pattern = lexicon::hash_lemmas$token, replacement = lexicon::hash_lemmas$lemma)
+lemma_dfm_sc <- dfm(lemmas_sc)
+
+topfeatures(stem_dfm_sc, 20)
+topfeatures(lemma_dfm_sc, 20)
+
+# Discussion: What can we observe about stemming and lemmatization? which method (if any) is better for answering our research questions, and why?
+
+# Make a word cloud of the lemmatized results:
+textplot_wordcloud(lemma_dfm_sc, rotation = 0.25,
+                   max_words=50,
+                   color = rev(RColorBrewer::brewer.pal(10, "Paired")))
+
+# 9. Plot Frequency #########
+# Plot the top 20 words (non-lemmatized) in another way:
+top_keys_sc <- topfeatures (dfm_nostop_sc, 20)
+data.frame(list(term = names(top_keys_sc), frequency = unname(top_keys_sc))) %>% # Create a data.frame for ggplot
+  ggplot(aes(x = reorder(term,-frequency), y = frequency)) + # Plotting with ggplot2
+  geom_point() +
+  theme_bw() +
+  labs(x = "Term", y = "Frequency") +
+  theme(axis.text.x=element_text(angle=90, hjust=1))
+
 #2. Looking at top_keys with your table along with the word clouds we've made so far (hint: you can scroll through the plots using the arrows in the top left corner of the window),
 #what can keywords show us about a corpus? What do they not show us?
 
