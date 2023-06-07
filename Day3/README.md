@@ -23,3 +23,19 @@ This gave Ugur an interesting opportunity to investigate if issue polarisation a
 
 Ugur found that issue polarisation is leading to affective partisan sorting, an turbulent times seemed to sharpen affective partisan divisions.
 His future work will investigate different subgroups.
+
+## Sentiment analysis
+
+Sentiment analysis is a form of supervised learning that assigns a polarity score (positive or negative) to textual data.
+It's important to consider whether the training dataset matches the data that will be analysed, as micmatches can cause strange results.
+It works best on the sentence or paragraph level.
+Some limitations include sarcasm and humour.
+
+## Practical 1
+We will be looking at data scraped from the Reddit subreddits r/AskUK and r/Scotland. 
+We will be using the syuzhet, vader, wordcloud, and tm R packages.
+
+The aims for the session are:
+
+- Identify if there are trends that we can observe about sentiment about the CoL in each data set
+- Based on one data set only, can we work out of the CoL crisis getting better or worse in 2023? How do things differ in Scotland vs. the UK?
