@@ -58,6 +58,19 @@ There are two possible errors in decision making:
 - Type 1 error - incorrectly reject H0
 - Type 2 error - incorrectly retain H0
 
+#### Cluster analysis
+Cluster analysis is a way of dividing objects in a dataset into groups made up of similar characteristics.
+There are many different types of cluster analysis.
+
+#### Principle compoment analysis
+This is a technique used to emphasise variation and bring out patterns in a dataset.
+It can be done when you have 3 or more continuous variables, and 1 or more categorical variable.
+
+#### K-means clustering
+K-means clustering is one of the most simple and popular unsupervised machine learning algoriths.
+It will group your data into a defined number of clusters.
+It does however have drawbacks: it does not handle complexity in data well, and it assumes that clusters will always be spherical which is not always the case.
+
 ## Practical
 We are using the following packages to run different statistical analyses: tidyverse, lme4, ggfortify.
 
