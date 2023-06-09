@@ -33,3 +33,21 @@ They preform well at a variety of tasks, understand semantic relations, and reta
 Large language models claim to represent language, but what they produce are based on mathematical algorithms.
 
 ## Data visualisation
+When making visualisations, you should consider:
+
+- Will it be printed or online?
+- How big will it be?
+- How can I improve the understanding?
+
+It's important to avoid overly complex graphics.
+
+There are many different tpes of graphics.
+
+- Histograms, density plots, and boxplots can be used to visualise distributions.
+- Piecharts, stacked bar graphs, and treemaps can be used to visualise ratios.
+- Scatterplots, heatmas, and network diagrams can be used to visualise relations.
+- Line graphs and stream graphs can be used to visualise change.
+
+## Practical
+
+In the practical session, we made different graphs using various R packages.
